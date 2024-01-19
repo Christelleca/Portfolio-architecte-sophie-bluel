@@ -91,6 +91,10 @@ video {
     font: inherit;
     vertical-align: baseline;
 }
+a {
+    text-decoration: none;
+    color: black;
+}
 /* HTML5 display-role reset for older browsers */
 article,
 aside,
@@ -204,7 +208,27 @@ li:hover {
     text-align: center;
     margin-bottom: 1em;
 }
-
+#filter-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px 0px 50px;
+}
+.button_category {
+    height: 37px;
+    border-radius: 60px;
+    border: 1px solid #1d6154;
+    color: #1d6154;
+    background: #fffef8;
+    text-align: center;
+    font-family: Syne;
+    font-size: 16px;
+    margin: 10px;
+}
+.filter_selected {
+    background: #1d6154;
+    color: #fff;
+}
 .gallery {
     width: 100%;
     display: grid;
