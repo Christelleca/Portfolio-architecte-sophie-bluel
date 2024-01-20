@@ -91,10 +91,7 @@ video {
     font: inherit;
     vertical-align: baseline;
 }
-a {
-    text-decoration: none;
-    color: black;
-}
+
 /* HTML5 display-role reset for older browsers */
 article,
 aside,
@@ -142,6 +139,10 @@ header {
     display: flex;
     justify-content: space-between;
     margin: 50px 0;
+}
+header a {
+    text-decoration: none;
+    color: black;
 }
 section {
     margin: 50px 0;
@@ -240,30 +241,51 @@ li:hover {
 .gallery img {
     width: 100%;
 }
-#contact {
+#contact,
+#login {
     width: 50%;
     margin: auto;
 }
+
 #contact > * {
     text-align: center;
 }
 #contact h2 {
     margin-bottom: 20px;
 }
-#contact form {
+#contact form,
+#login form {
     text-align: left;
     margin-top: 30px;
     display: flex;
     flex-direction: column;
 }
-
-#contact input {
+#login {
+    padding: 130px;
+}
+#login h2,
+a,
+p {
+    display: flex;
+    justify-content: center;
+}
+#login p {
+    padding: 5px;
+    color: red;
+}
+#login a {
+    color: black;
+}
+#contact input,
+#login input,
+#login button {
     height: 50px;
     font-size: 1.2em;
     border: none;
     box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-#contact label {
+#contact label,
+#login label {
     margin: 2em 0 1em 0;
 }
 #contact textarea {
@@ -271,7 +293,8 @@ li:hover {
     box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"] {
+input[type="submit"],
+#login button {
     font-family: "Syne";
     font-weight: 700;
     color: white;
