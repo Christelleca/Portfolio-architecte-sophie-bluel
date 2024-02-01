@@ -190,6 +190,10 @@ function displayWorksInContainerGalery(projects = worksData) {
         const figure = document.createElement("figure");
         const span = document.createElement("span");
         const trash = document.createElement("i");
+
+        // Ajoutez l'attribut data-id à l'icône de la corbeille
+        trash.dataset.id = project.id;
+
         trash.classList.add("fa-solid", "fa-trash-can");
         figure.innerHTML = `
             <img src="${project.imageUrl}" alt="${project.title}">`;
@@ -203,52 +207,45 @@ function displayWorksInContainerGalery(projects = worksData) {
         const trash = e.target.closest(".fa-trash-can");
         if (trash) {
             const id = trash.dataset.id; // Utiliser dataset pour obtenir l'ID stocké dans l'attribut data-id
-            deleteWork(id);
+            deleteWork(id, e); // Passer l'objet Event en tant que deuxième argument
         }
     });
 }
 
-// Suppression des projets de la modale
-// Suppression des projets de la modale
-function deleteWork() {
-    const trashAll = document.querySelectorAll(".fa-trash-can");
-    trashAll.forEach((trash) => {
-        trash.addEventListener("click", (e) => {
-            const id = 1; // Remplacez 1 par l'ID du projet que vous souhaitez supprimer
-            const token = localStorage.getItem("token");
+// Modifier la fonction deleteWork pour utiliser l'ID du projet
+function deleteWork(id) {
+    const token = localStorage.getItem("token");
 
-            if (!token) {
-                console.error(
-                    "Token non trouvé. L'utilisateur n'est probablement pas connecté."
+    if (!token) {
+        console.error(
+            "Token non trouvé. L'utilisateur n'est probablement pas connecté."
+        );
+        return;
+    }
+
+    const init = {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    fetch(`http://localhost:5678/api/works/${id}`, init)
+        .then(async (response) => {
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Suppression réussie:", data);
+                displayWorks();
+                displayProjectAndCategories();
+            } else {
+                const errorMessage = await response.text();
+                throw new Error(
+                    `La suppression du projet a échoué. Erreur: ${errorMessage}`
                 );
-                return;
             }
-
-            const init = {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-
-            fetch(`http://localhost:5678/api/works/${id}`, init)
-                .then(async (response) => {
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log("Suppression réussie:", data);
-                        displayWorks();
-                        displayProjectAndCategories();
-                    } else {
-                        const errorMessage = await response.text();
-                        throw new Error(
-                            `La suppression du projet a échoué. Erreur: ${errorMessage}`
-                        );
-                    }
-                })
-                .catch((error) => {
-                    console.error(error.message);
-                });
+        })
+        .catch((error) => {
+            console.error(error.message);
         });
-    });
 }

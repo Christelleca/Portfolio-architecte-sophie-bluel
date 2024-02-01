@@ -256,7 +256,8 @@ li:hover {
     margin-bottom: 20px;
 }
 #contact form,
-#login form {
+#login form,
+.contain_form_modale form {
     text-align: left;
     margin-top: 30px;
     display: flex;
@@ -280,7 +281,9 @@ p {
 }
 #contact input,
 #login input,
-#login button {
+#login button,
+.contain_form_modale input,
+#categorie {
     height: 50px;
     font-size: 1.2em;
     border: none;
@@ -330,7 +333,8 @@ footer nav ul {
     color: #fff;
 }
 
-.container_modal {
+.container_modal,
+.modale_send_work {
     display: none;
     justify-content: center;
     align-items: center;
@@ -340,7 +344,8 @@ footer nav ul {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
-.modale {
+.modale,
+.contain_form_modale {
     background-color: white;
     width: 580px;
     height: 700px;
@@ -373,14 +378,16 @@ footer nav ul {
     font-size: 26px;
 }
 
-.modale .fa-xmark {
+.modale .fa-xmark,
+.contain_form_modale .fa-xmark {
     cursor: pointer;
     position: absolute;
     right: 20px;
     top: 20px;
 }
 
-.modale button {
+.modale button,
+.contain_form_modale button {
     font-family: "syne";
     color: white;
     background-color: #1d6154;
@@ -422,4 +429,15 @@ footer nav ul {
     background: none;
     padding: 20px 25px 41px;
     display: none;
+}
+
+.contain_btn_add_img {
+    border-radius: 3px;
+    background: #e8f1f6;
+    width: 420px;
+    height: 169px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
