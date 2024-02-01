@@ -102,29 +102,39 @@ async function handleLogin() {
     const storedToken = localStorage.getItem("token");
 
     // Si l'utilisateur est connecté //
+    // variables //
+    const loginLink = document.getElementById("get_loged");
+    const logoutLink = document.getElementById("logout");
+    const modifyButton = document.querySelector(".modify");
+    const modify2 = document.getElementById("modify_2");
+    const edition = document.querySelector(".edition");
+
     if (storedToken) {
-        const loginLink = document.getElementById("get_loged");
         loginLink.style.display = "none";
 
-        const logoutLink = document.getElementById("logout");
         logoutLink.style.display = "block";
 
-        const modifyButton = document.querySelector(".modify");
         modifyButton.style.display = "block";
+
+        modify2.style.display = "block";
+
+        edition.style.display = "flex";
 
         // Récupérer et afficher les projets après connexion //
         const works = await fetchWorks();
         displayWorks(works);
     } else {
         // Si l'utilisateur n'est pas connecté //
-        const loginLink = document.getElementById("get_loged");
+
         loginLink.style.display = "block";
 
-        const logoutLink = document.getElementById("logout");
         logoutLink.style.display = "none";
 
-        const modifyButton = document.querySelector(".modify");
         modifyButton.style.display = "none";
+
+        modify2.style.display = "none";
+
+        edition.style.display = "none";
 
         fetchData();
     }
@@ -145,12 +155,22 @@ logoutLink.addEventListener("click", handleLogout);
 // Bouton de modification //
 const modifyButton = document.querySelector(".modify");
 modifyButton.addEventListener("click", () => {
-    // Afficher le conteneur modal //
+    // Afficher le conteneur modal
     const modalContainer = document.querySelector(".container_modal");
     modalContainer.style.display = "flex";
 
-    // Afficher les projets dans la modal//
-    displayWorksInModal();
+    // Afficher les projets dans le container_galery
+    displayWorksInContainerGalery();
+});
+
+const modify2 = document.getElementById("modify_2");
+modify2.addEventListener("click", () => {
+    // Afficher le conteneur modal
+    const modalContainer = document.querySelector(".container_modal");
+    modalContainer.style.display = "flex";
+
+    // Afficher les projets dans le container_galery
+    displayWorksInContainerGalery();
 });
 
 // Evenement lors de la fermeture de modale //
@@ -161,17 +181,74 @@ closeModalButton.addEventListener("click", () => {
     modalContainer.style.display = "none";
 });
 
-// Fonction pour afficher les images des projets dans modal //
-function displayWorksInModal(projects = worksData) {
-    const modalGallery = document.querySelector(".modale");
-    modalGallery.innerHTML = "";
+// Fonction pour afficher les images des projets dans le container_galery
+function displayWorksInContainerGalery(projects = worksData) {
+    const containerGalery = document.querySelector(".container_galery");
+    containerGalery.innerHTML = "";
 
     projects.forEach((project) => {
         const figure = document.createElement("figure");
+        const span = document.createElement("span");
+        const trash = document.createElement("i");
+        trash.classList.add("fa-solid", "fa-trash-can");
         figure.innerHTML = `
-            <img src="${project.imageUrl}" alt="${project.title}">
-            <figcaption>${project.title}</figcaption>
-        `;
-        modalGallery.appendChild(figure);
+            <img src="${project.imageUrl}" alt="${project.title}">`;
+        figure.appendChild(span); // Ajoutez le span à la figure
+        span.appendChild(trash); // Ajoutez l'icône de la poubelle au span
+        containerGalery.appendChild(figure);
+    });
+
+    // Ajouter un événement de délégation au parent container_galery
+    containerGalery.addEventListener("click", (e) => {
+        const trash = e.target.closest(".fa-trash-can");
+        if (trash) {
+            const id = trash.dataset.id; // Utiliser dataset pour obtenir l'ID stocké dans l'attribut data-id
+            deleteWork(id);
+        }
+    });
+}
+
+// Suppression des projets de la modale
+// Suppression des projets de la modale
+function deleteWork() {
+    const trashAll = document.querySelectorAll(".fa-trash-can");
+    trashAll.forEach((trash) => {
+        trash.addEventListener("click", (e) => {
+            const id = 1; // Remplacez 1 par l'ID du projet que vous souhaitez supprimer
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                console.error(
+                    "Token non trouvé. L'utilisateur n'est probablement pas connecté."
+                );
+                return;
+            }
+
+            const init = {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            };
+
+            fetch(`http://localhost:5678/api/works/${id}`, init)
+                .then(async (response) => {
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log("Suppression réussie:", data);
+                        displayWorks();
+                        displayProjectAndCategories();
+                    } else {
+                        const errorMessage = await response.text();
+                        throw new Error(
+                            `La suppression du projet a échoué. Erreur: ${errorMessage}`
+                        );
+                    }
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        });
     });
 }

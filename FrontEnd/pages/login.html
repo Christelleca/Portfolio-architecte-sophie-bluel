@@ -14,49 +14,51 @@
         <link rel="stylesheet" href="/FrontEnd/assets/style.css" />
     </head>
     <body>
-        <header>
-            <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
-            <nav>
-                <ul>
-                    <li>projets</li>
-                    <li>contact</li>
-                    <a href="/FrontEnd/pages/login.html"><li>login</li></a>
-                    <li>
-                        <img
-                            src="/FrontEnd/assets/icons/instagram.png"
-                            alt="Instagram"
-                        />
-                    </li>
-                </ul>
-            </nav>
-        </header>
-        <main>
-            <section id="login">
-                <h2>Log In</h2>
+        <div class="flexmid_item">
+            <header>
+                <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+                <nav>
+                    <ul>
+                        <li>projets</li>
+                        <li>contact</li>
+                        <a href="/FrontEnd/pages/login.html"><li>login</li></a>
+                        <li>
+                            <img
+                                src="/FrontEnd/assets/icons/instagram.png"
+                                alt="Instagram"
+                            />
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            <main>
+                <section id="login">
+                    <h2>Log In</h2>
 
-                <form action="submit">
-                    <label for="email">E-mail</label>
-                    <input type="text" id="email" />
-                    <label for="password">Mot de passe</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        required
-                    />
-                    <p></p>
-                    <button>se connecter</button>
-                    <a href="#">Mot de passe oublié</a>
-                </form>
-            </section>
-        </main>
-        <footer>
-            <nav>
-                <ul>
-                    <li>Mentions Légales</li>
-                </ul>
-            </nav>
-        </footer>
+                    <form action="submit">
+                        <label for="email">E-mail</label>
+                        <input type="text" id="email" />
+                        <label for="password">Mot de passe</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            required
+                        />
+                        <p></p>
+                        <button>se connecter</button>
+                        <a href="#">Mot de passe oublié</a>
+                    </form>
+                </section>
+            </main>
+            <footer>
+                <nav>
+                    <ul>
+                        <li>Mentions Légales</li>
+                    </ul>
+                </nav>
+            </footer>
+        </div>
         <script src="/FrontEnd/js/login.js"></script>
     </body>
 </html>
