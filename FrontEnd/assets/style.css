@@ -333,8 +333,7 @@ footer nav ul {
     color: #fff;
 }
 
-.container_modal,
-.modale_send_work {
+.container_modal {
     display: none;
     justify-content: center;
     align-items: center;
@@ -373,7 +372,8 @@ footer nav ul {
     height: 104.08px;
 }
 
-.modale p {
+.modale p,
+.contain_form_modale p {
     font-family: "Work Sans";
     font-size: 26px;
 }
@@ -386,8 +386,7 @@ footer nav ul {
     top: 20px;
 }
 
-.modale button,
-.contain_form_modale button {
+.modale button {
     font-family: "syne";
     color: white;
     background-color: #1d6154;
@@ -431,7 +430,27 @@ footer nav ul {
     display: none;
 }
 
-.contain_btn_add_img {
+/* Modale ajout des travaux */
+
+.fa-arrow-left {
+    cursor: pointer;
+    position: absolute;
+    font-size: 20px;
+    left: 20px;
+    top: 20px;
+}
+.modale_send_work {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.contain_btn_add_img,
+.container_img_import {
     border-radius: 3px;
     background: #e8f1f6;
     width: 420px;
@@ -439,5 +458,69 @@ footer nav ul {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.contain_btn_add_img .fa-image {
+    color: #cbd6dc;
+    font-size: 70px;
+}
+
+.container_img_import img {
+    width: 129px;
+    height: 169px;
+}
+
+.contain_btn_add_img button {
+    font-family: "syne";
+    color: #306685;
+    background: #cbd6dc;
+    text-align: center;
+    width: 195px;
+    border-radius: 50px;
+    height: 40px;
+    border: none;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+.contain_btn_add_img p {
+    text-align: center;
+    font-family: "Work Sans";
+    font-size: 10px;
+    color: #444;
+    font-weight: 400;
+}
+
+.contain_form_modale form {
+    gap: 10px;
+    width: 420px;
+    height: 160px;
+    color: #3d3d3d;
+    font-size: 14px;
+    font-weight: 500;
+    padding-bottom: 80px;
+    border-bottom: 1px solid #b3b3b3;
+}
+
+.btn_post_img {
+    border-radius: 60px;
+    width: 237px;
+    height: 36px;
+    border: none;
+    margin: 10px;
+    color: #fff;
+    text-align: center;
+    font-family: Syne;
+    font-size: 14px;
+    background: #a7a7a7;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+.error_file {
+    text-align: center;
+    font-family: "Work Sans";
+    font-size: 10px;
+    color: #e70c0c;
+    font-weight: 200;
 }

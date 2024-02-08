@@ -34,11 +34,15 @@
         </div>
         <div class="modale_send_work">
             <div class="contain_form_modale">
+                <i class="fa-solid fa-arrow-left"></i>
                 <span><i class="fa-solid fa-xmark"></i></span>
                 <p>Ajout photo</p>
-                <div class="contain_btn_add_img">
-                    <i class="fa-regular fa-image"></i>
-                    <button>+ Ajouter photo</button>
+                <div class="container_img_import">
+                    <div class="contain_btn_add_img">
+                        <span><i class="fa-regular fa-image"></i></span>
+                        <button>+ Ajouter photo</button>
+                        <p>jpg.png : 4mo max</p>
+                    </div>
                 </div>
                 <form>
                     <label for="titre">Titre</label>
@@ -46,11 +50,11 @@
 
                     <label for="categorie">Catégorie</label>
                     <select id="categorie" name="categorie" required>
-                        <option value="option1">Option 1</option>
+                        <option value="">...</option>
                     </select>
-
-                    <button type="submit">Valider</button>
                 </form>
+                <button class="btn_post_img">Valider</button>
+                <p></p>
             </div>
         </div>
         <div class="flexmid_item">
