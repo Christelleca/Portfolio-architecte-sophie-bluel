@@ -36,15 +36,26 @@
             <div class="contain_form_modale">
                 <i class="fa-solid fa-arrow-left"></i>
                 <span><i class="fa-solid fa-xmark"></i></span>
-                <p>Ajout photo</p>
-                <div class="container_img_import">
-                    <div class="contain_btn_add_img">
+                <p class="title_modale">Ajout photo</p>
+                <div class="contain_btn_add_img">
+                    <form class="form_preview_img">
                         <span><i class="fa-regular fa-image"></i></span>
-                        <button>+ Ajouter photo</button>
+                        <label for="image" class="custom-file-upload"
+                            >+ Ajouter photo</label
+                        >
+                        <input
+                            class="img_data_selected"
+                            type="file"
+                            id="image"
+                            name="image"
+                            accept="image/jpeg, image/png"
+                            required
+                        />
                         <p>jpg.png : 4mo max</p>
-                    </div>
+                    </form>
+                    <img src="#" alt="Apercu de l'image" />
                 </div>
-                <form>
+                <form class="form_title_category">
                     <label for="titre">Titre</label>
                     <input type="text" id="titre" name="titre" required />
 
@@ -53,8 +64,8 @@
                         <option value="">...</option>
                     </select>
                 </form>
+                <p class="error_data"></p>
                 <button class="btn_post_img">Valider</button>
-                <p></p>
             </div>
         </div>
         <div class="flexmid_item">
