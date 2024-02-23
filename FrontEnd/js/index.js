@@ -219,36 +219,36 @@ function displayWorksInContainerGalery(projects = worksData) {
 async function deleteWork(id) {
     const token = localStorage.getItem("token");
 
-    console.log("ID du work à supprimer:", id);
-    console.log("worksData avant la suppression:", worksData);
+    const init = {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
 
-    // Trouver l'index du work avec l'ID spécifié
-    const index = worksData.findIndex((work) => work.id === id);
-
-    console.log("Index du work à supprimer:", index);
-
-    if (index !== -1) {
-        // Supprimer l'élément du DOM correspondant au work supprimé dans la modale
-        const modalWorkToDelete = document.querySelector(
-            `.modale_send_work [data-id="${id}"]`
-        );
-        if (modalWorkToDelete) {
-            modalWorkToDelete.remove();
-        }
-
-        // Supprimer le work du tableau worksData
-        const deletedWork = worksData.splice(index, 1)[0]; // Récupérer l'élément supprimé
-
-        console.log("worksData après la suppression:", worksData);
-
-        // Actualiser l'affichage
-        displayWorksInContainerGalery();
-
-        // Afficher un message de succès ou effectuer toute autre action nécessaire
-        alert("Le work a été supprimé avec succès.");
-    } else {
-        alert("Le work que vous essayez de supprimer n'existe pas.");
+    const response = await fetch(`http://localhost:5678/api/works/${id}`, init);
+    if (!response.ok) {
+        throw new Error("Erreur lors de la suppression du work");
     }
+
+    // Supprimer l'élément du DOM correspondant au work supprimé sur la page d'accueil
+    const figureToDelete = document.querySelector(`.gallery [data-id="${id}"]`);
+    if (figureToDelete) {
+        figureToDelete.remove();
+    }
+
+    // Supprimer l'élément du DOM correspondant au work supprimé dans la modale
+    const modalWorkToDelete = document.querySelector(
+        `.modale_send_work [data-id="${id}"]`
+    );
+    if (modalWorkToDelete) {
+        modalWorkToDelete.remove();
+    }
+
+    // Mettre à jour les données des projets
+    const updatedWorks = await fetchWorks();
+    displayWorksInContainerGalery(updatedWorks);
+    displayWorks(updatedWorks);
 }
 
 // Variable des éléments d'ajout des nouveaux projets
