@@ -171,11 +171,17 @@ modify2.addEventListener("click", () => {
     displayWorksInContainerGalery();
 });
 
-// Evenement lors de la fermeture de modale //
-const closeModalButton = document.querySelector(".fa-xmark");
-closeModalButton.addEventListener("click", () => {
-    const modalContainer = document.querySelector(".container_modal");
-    modalContainer.style.display = "none";
+// Sélection de la modale
+const modalContainer = document.querySelector(".container_modal");
+
+// Evenement lors de la fermeture de la modale en cliquant sur .fa-xmark ou .container_modal
+modalContainer.addEventListener("click", (event) => {
+    if (
+        event.target.classList.contains("fa-xmark") ||
+        event.target === modalContainer
+    ) {
+        modalContainer.style.display = "none";
+    }
 });
 
 // Fonction pour afficher les images des projets dans le container_galery
@@ -213,44 +219,44 @@ function displayWorksInContainerGalery(projects = worksData) {
 async function deleteWork(id) {
     const token = localStorage.getItem("token");
 
-    const init = {
-        method: "DELETE",
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
+    console.log("ID du work à supprimer:", id);
+    console.log("worksData avant la suppression:", worksData);
 
-    const response = await fetch(`http://localhost:5678/api/works/${id}`, init);
-    if (!response.ok) {
-        throw new Error("Erreur lors de la suppression du work");
+    // Trouver l'index du work avec l'ID spécifié
+    const index = worksData.findIndex((work) => work.id === id);
+
+    console.log("Index du work à supprimer:", index);
+
+    if (index !== -1) {
+        // Supprimer l'élément du DOM correspondant au work supprimé dans la modale
+        const modalWorkToDelete = document.querySelector(
+            `.modale_send_work [data-id="${id}"]`
+        );
+        if (modalWorkToDelete) {
+            modalWorkToDelete.remove();
+        }
+
+        // Supprimer le work du tableau worksData
+        const deletedWork = worksData.splice(index, 1)[0]; // Récupérer l'élément supprimé
+
+        console.log("worksData après la suppression:", worksData);
+
+        // Actualiser l'affichage
+        displayWorksInContainerGalery();
+
+        // Afficher un message de succès ou effectuer toute autre action nécessaire
+        alert("Le work a été supprimé avec succès.");
+    } else {
+        alert("Le work que vous essayez de supprimer n'existe pas.");
     }
-
-    // Supprimer l'élément du DOM correspondant au work supprimé sur la page d'accueil
-    const figureToDelete = document.querySelector(`.gallery [data-id="${id}"]`);
-    if (figureToDelete) {
-        figureToDelete.remove();
-    }
-
-    // Supprimer l'élément du DOM correspondant au work supprimé dans la modale
-    const modalWorkToDelete = document.querySelector(
-        `.modale_send_work [data-id="${id}"]`
-    );
-    if (modalWorkToDelete) {
-        modalWorkToDelete.remove();
-    }
-
-    // Mettre à jour les données des projets
-    const updatedWorks = await fetchWorks();
-    displayWorksInContainerGalery(updatedWorks);
-    displayWorks(updatedWorks);
 }
 
 // Variable des éléments d'ajout des nouveaux projets
 const addButton = document.querySelector(".container_modal button");
-const modalContainer = document.querySelector(".container_modal");
 const sendWorkModal = document.querySelector(".modale_send_work");
 const arrowLeftIcon = document.querySelector(".fa-solid.fa-arrow-left");
 const submitButton = document.querySelector(".btn_post_img");
+const errorMessage = document.querySelector(".error_data");
 
 // Ecouteur d'événements au clic sur le bouton "ajouter une photo"
 addButton.addEventListener("click", () => {
@@ -258,12 +264,16 @@ addButton.addEventListener("click", () => {
     sendWorkModal.style.display = "flex";
 });
 
-// Sélection de l'icône "fa-xmark" de la modale formulaire
+// Sélection de l'icône "fa-xmark" de la modale d'envoi de travail
 const closeModalIcon = document.querySelector(".contain_form_modale .fa-xmark");
 
-// Ecouteur d'événements au clic sur l'icône "fa-xmark"
-closeModalIcon.addEventListener("click", () => {
-    sendWorkModal.style.display = "none";
+// Ecouteur d'événements pour la modale d'envoi de travail
+sendWorkModal.addEventListener("click", (event) => {
+    // Si l'élément cliqué est l'icône "fa-xmark" ou la modale elle-même
+    if (event.target === closeModalIcon || event.target === sendWorkModal) {
+        // Masquer la modale d'envoi de travail
+        sendWorkModal.style.display = "none";
+    }
 });
 
 // Evénements pour le clic sur l'icône de flèche gauche
@@ -302,7 +312,6 @@ async function uploadImage(file) {
 // Gestion de la sélection de fichier
 async function handleFileSelection(event) {
     const file = event.target.files[0];
-    const errorMessage = document.querySelector(".error_data");
 
     if (file) {
         // Vérification de la taille du fichier
@@ -378,7 +387,7 @@ submitButton.addEventListener("click", async (event) => {
 
     // Vérifier si tous les champs sont remplis
     if (!title || !category || !image) {
-        alert("Veuillez remplir tous les champs.");
+        errorMessage.textContent = "Veuillez remplir tous les champs.";
         return;
     }
 
@@ -396,41 +405,31 @@ submitButton.addEventListener("click", async (event) => {
         body: formData,
     };
 
-    try {
-        const response = await fetch(
-            "http://localhost:5678/api/works",
-            request
-        );
+    const response = await fetch("http://localhost:5678/api/works", request);
 
-        if (response.ok) {
-            // Réinitialiser le formulaire après l'ajout du travail
-            document.getElementById("titre").value = "";
-            document.getElementById("categorie").value = "";
-            imageInput.value = "";
+    if (response.ok) {
+        // Réinitialiser le formulaire après l'ajout du travail
+        document.getElementById("titre").value = "";
+        document.getElementById("categorie").value = "";
+        imageInput.value = "";
 
-            // Rafraîchir la liste des travaux sur la page d'accueil
-            const updatedWorks = await fetchWorks();
-            displayWorks(updatedWorks);
-            alert(`Votre projet ${title} a été ajouté avec succès.`);
+        // Rafraîchir la liste des travaux sur la page d'accueil
+        const updatedWorks = await fetchWorks();
+        displayWorks(updatedWorks);
 
-            // Réinitialiser l'aperçu de l'image
-            const previewImage = document.querySelector(
-                ".contain_btn_add_img img"
-            );
-            previewImage.src = "#";
-            previewImage.style.display = "none";
+        // Réinitialiser l'aperçu de l'image
+        const previewImage = document.querySelector(".contain_btn_add_img img");
+        previewImage.src = "#";
+        previewImage.style.display = "none";
 
-            // Réafficher le formulaire d'aperçu de l'image
-            const previewForm = document.querySelector(".form_preview_img");
-            previewForm.style.display = "flex";
+        // Réafficher le formulaire d'aperçu de l'image
+        const previewForm = document.querySelector(".form_preview_img");
+        previewForm.style.display = "flex";
 
-            // Réinitialiser le bouton
-            submitButton.style.background = "";
-        } else {
-            alert("Erreur lors de l'ajout du projet.");
-        }
-    } catch (error) {
-        console.error("Erreur lors de l'ajout du projet :", error);
+        // Réinitialiser le bouton
+        submitButton.style.background = "";
+    } else {
+        alert("Erreur lors de l'ajout du projet.");
     }
 });
 

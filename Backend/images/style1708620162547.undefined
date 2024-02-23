@@ -542,5 +542,4 @@ footer nav ul {
     font-size: 10px;
     color: #e70c0c;
     font-weight: 200;
-    margin-bottom: -40px;
 }
