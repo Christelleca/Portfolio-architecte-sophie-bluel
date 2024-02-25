@@ -231,13 +231,11 @@ async function deleteWork(id) {
         throw new Error("Erreur lors de la suppression du work");
     }
 
-    // Supprimer l'élément du DOM correspondant au work supprimé sur la page d'accueil
     const figureToDelete = document.querySelector(`.gallery [data-id="${id}"]`);
     if (figureToDelete) {
         figureToDelete.remove();
     }
 
-    // Supprimer l'élément du DOM correspondant au work supprimé dans la modale
     const modalWorkToDelete = document.querySelector(
         `.modale_send_work [data-id="${id}"]`
     );
@@ -245,7 +243,6 @@ async function deleteWork(id) {
         modalWorkToDelete.remove();
     }
 
-    // Mettre à jour les données des projets
     const updatedWorks = await fetchWorks();
     displayWorksInContainerGalery(updatedWorks);
     displayWorks(updatedWorks);
@@ -269,9 +266,7 @@ const closeModalIcon = document.querySelector(".contain_form_modale .fa-xmark");
 
 // Ecouteur d'événements pour la modale d'envoi de travail
 sendWorkModal.addEventListener("click", (event) => {
-    // Si l'élément cliqué est l'icône "fa-xmark" ou la modale elle-même
     if (event.target === closeModalIcon || event.target === sendWorkModal) {
-        // Masquer la modale d'envoi de travail
         sendWorkModal.style.display = "none";
     }
 });
@@ -290,23 +285,18 @@ async function uploadImage(file) {
     const formData = new FormData();
     formData.append("image", file);
 
-    try {
-        const response = await fetch("http://localhost:5678/api/works", {
-            method: "POST",
-            body: formData,
-            headers: {
-                Authorization: `Bearer ${token}`, // Inclure le jeton dans l'en-tête de la requête
-            },
-        });
-        if (!response.ok) {
-            throw new Error("Erreur lors de l'envoi de l'image.");
-        }
-        const imageData = await response.json();
-        return imageData.url; // Renvoyer l'URL de l'image téléchargée
-    } catch (error) {
-        console.error(error);
-        throw new Error("Une erreur est survenue lors de l'envoi de l'image.");
+    const response = await fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        body: formData,
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    if (!response.ok) {
+        throw new Error("Erreur lors de l'envoi de l'image.");
     }
+    const imageData = await response.json();
+    return imageData.url;
 }
 
 // Gestion de la sélection de fichier
@@ -332,43 +322,34 @@ async function handleFileSelection(event) {
             containerBtnAddImg.innerHTML = "";
             containerBtnAddImg.appendChild(imagePreview);
         } catch (error) {
-            errorMessage.textContent = error.message;
+            errorMessage.textContent = "Format ou taille du fichier incorrect.";
         }
     }
 }
 
-// Sélection de l'élément input de type file
 // Événement pour le changement de fichier sélectionné
 const fileInput = document.getElementById("image");
 fileInput.addEventListener("change", function (event) {
     const previewImage = document.querySelector(".contain_btn_add_img img");
     const previewForm = document.querySelector(".form_preview_img");
-    const file = event.target.files[0]; // Récupérer le premier fichier sélectionné
-    const reader = new FileReader(); // Créer un objet FileReader
+    const file = event.target.files[0];
+    const reader = new FileReader();
 
     // Événement lorsque la lecture du fichier est terminée
     reader.onload = function () {
-        // Mettre à jour la source de l'image avec les données de l'image chargée
         previewImage.src = reader.result;
-        // Afficher l'aperçu de l'image en mettant la balise img en display block
         previewImage.style.display = "block";
-        // Masquer le formulaire d'aperçu de l'image
         previewForm.style.display = "none";
-        // Modifier le style du bouton de validation
         const submitButton = document.querySelector(".btn_post_img");
         submitButton.style.background = "#1D6154";
     };
 
     if (file) {
-        // Lire le contenu du fichier en tant que URL de données
         reader.readAsDataURL(file);
     } else {
-        // Si aucun fichier n'est sélectionné, réinitialiser l'aperçu de l'image
         previewImage.src = "#";
-        previewImage.style.display = "none"; // Masquer l'aperçu de l'image
-        // Afficher le formulaire d'aperçu de l'image
+        previewImage.style.display = "none";
         previewForm.style.display = "block";
-        // Réinitialiser le style du bouton de validation
         const submitButton = document.querySelector(".btn_post_img");
         submitButton.style.background = "";
     }
@@ -408,25 +389,19 @@ submitButton.addEventListener("click", async (event) => {
     const response = await fetch("http://localhost:5678/api/works", request);
 
     if (response.ok) {
-        // Réinitialiser le formulaire après l'ajout du travail
         document.getElementById("titre").value = "";
         document.getElementById("categorie").value = "";
         imageInput.value = "";
 
-        // Rafraîchir la liste des travaux sur la page d'accueil
         const updatedWorks = await fetchWorks();
         displayWorks(updatedWorks);
 
-        // Réinitialiser l'aperçu de l'image
         const previewImage = document.querySelector(".contain_btn_add_img img");
         previewImage.src = "#";
         previewImage.style.display = "none";
 
-        // Réafficher le formulaire d'aperçu de l'image
         const previewForm = document.querySelector(".form_preview_img");
         previewForm.style.display = "flex";
-
-        // Réinitialiser le bouton
         submitButton.style.background = "";
     } else {
         alert("Erreur lors de l'ajout du projet.");

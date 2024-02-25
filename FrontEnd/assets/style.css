@@ -219,6 +219,7 @@ li:hover {
     margin: 50px 0px 50px;
 }
 .button_category {
+    cursor: pointer;
     height: 37px;
     border-radius: 60px;
     border: 1px solid #1d6154;
@@ -311,6 +312,7 @@ input[type="submit"],
     width: 180px;
     text-align: center;
     border-radius: 60px;
+    cursor: pointer;
 }
 
 footer nav ul {
@@ -400,6 +402,7 @@ footer nav ul {
     height: 40px;
     border: none;
     box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+    cursor: pointer;
 }
 .container_galery span {
     position: absolute;
@@ -488,6 +491,7 @@ footer nav ul {
     font-size: 15px;
     border: none;
     box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+    cursor: pointer;
 }
 
 .contain_btn_add_img p {
@@ -531,6 +535,7 @@ footer nav ul {
     font-size: 14px;
     background: #a7a7a7;
     box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+    cursor: pointer;
 }
 
 #categorie {
