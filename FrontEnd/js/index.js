@@ -286,7 +286,7 @@ arrowLeftIcon.addEventListener("click", () => {
 
 // Fonction pour envoyer l'image sélectionnée
 async function uploadImage(file) {
-    const token = localStorage.getItem("token"); // Récupérer le jeton d'authentification depuis le stockage local
+    const token = localStorage.getItem("token");
     const formData = new FormData();
     formData.append("image", file);
 
