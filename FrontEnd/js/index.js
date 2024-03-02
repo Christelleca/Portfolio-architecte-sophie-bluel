@@ -231,11 +231,13 @@ async function deleteWork(id) {
         throw new Error("Erreur lors de la suppression du work");
     }
 
+    // Supprimer l'élément du DOM correspondant au work supprimé sur la page d'accueil
     const figureToDelete = document.querySelector(`.gallery [data-id="${id}"]`);
     if (figureToDelete) {
         figureToDelete.remove();
     }
 
+    // Supprimer l'élément du DOM correspondant au work supprimé dans la modale
     const modalWorkToDelete = document.querySelector(
         `.modale_send_work [data-id="${id}"]`
     );
@@ -263,13 +265,6 @@ addButton.addEventListener("click", () => {
 
 // Sélection de l'icône "fa-xmark" de la modale d'envoi de travail
 const closeModalIcon = document.querySelector(".contain_form_modale .fa-xmark");
-
-// Ecouteur d'événements pour la modale d'envoi de travail
-sendWorkModal.addEventListener("click", (event) => {
-    if (event.target === closeModalIcon || event.target === sendWorkModal) {
-        sendWorkModal.style.display = "none";
-    }
-});
 
 // Evénements pour le clic sur l'icône de flèche gauche
 arrowLeftIcon.addEventListener("click", () => {
@@ -327,29 +322,66 @@ async function handleFileSelection(event) {
     }
 }
 
-// Événement pour le changement de fichier sélectionné
+// Gestionnaire d'événement pour la modale d'envoi de travail
+sendWorkModal.addEventListener("click", async (event) => {
+    // Si l'élément cliqué est l'icône "fa-xmark" ou la modale elle-même
+    if (event.target === closeModalIcon || event.target === sendWorkModal) {
+        // Masquer la modale d'envoi de travail
+        sendWorkModal.style.display = "none";
+    }
+
+    // Vérifier si tous les champs sont remplis
+    const title = document.getElementById("titre").value;
+    const category = document.getElementById("categorie").value;
+    const imageInput = document.getElementById("image");
+    const image = imageInput.files[0];
+    const submitButton = document.querySelector(".btn_post_img");
+    const previewImage = document.querySelector(".contain_btn_add_img img");
+    if (title && category && image && previewImage.src !== "#") {
+        submitButton.style.background = "#1D6154";
+    } else {
+        submitButton.style.background = "";
+    }
+});
+
+// Ajouter un événement pour le changement de fichier sélectionné
 const fileInput = document.getElementById("image");
 fileInput.addEventListener("change", function (event) {
     const previewImage = document.querySelector(".contain_btn_add_img img");
     const previewForm = document.querySelector(".form_preview_img");
-    const file = event.target.files[0];
-    const reader = new FileReader();
+    const file = event.target.files[0]; // Récupérer le premier fichier sélectionné
+    const reader = new FileReader(); // Créer un objet FileReader
 
     // Événement lorsque la lecture du fichier est terminée
     reader.onload = function () {
+        // Mettre à jour la source de l'image avec les données de l'image chargée
         previewImage.src = reader.result;
+        // Afficher l'aperçu de l'image en mettant la balise img en display block
         previewImage.style.display = "block";
+        // Masquer le formulaire d'aperçu de l'image
         previewForm.style.display = "none";
+
+        // Vérifier si tous les champs sont remplis
+        const title = document.getElementById("titre").value;
+        const category = document.getElementById("categorie").value;
         const submitButton = document.querySelector(".btn_post_img");
-        submitButton.style.background = "#1D6154";
+        if (title && category && file && previewImage.src !== "#") {
+            submitButton.style.background = "#1D6154";
+        } else {
+            submitButton.style.background = "";
+        }
     };
 
     if (file) {
+        // Lire le contenu du fichier en tant que URL de données
         reader.readAsDataURL(file);
     } else {
+        // Si aucun fichier n'est sélectionné, réinitialiser l'aperçu de l'image
         previewImage.src = "#";
-        previewImage.style.display = "none";
+        previewImage.style.display = "none"; // Masquer l'aperçu de l'image
+        // Afficher le formulaire d'aperçu de l'image
         previewForm.style.display = "block";
+        // Réinitialiser le style du bouton de validation
         const submitButton = document.querySelector(".btn_post_img");
         submitButton.style.background = "";
     }
